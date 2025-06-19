@@ -1,7 +1,5 @@
-"use client";
 import React from "react";
 import Image from "next/image";
-import { productData } from "@/data/productData";
 import { Product } from "@/types/productType";
 import { notFound } from "next/navigation";
 
@@ -11,16 +9,26 @@ type Params = {
   };
 };
 
-// export default function page({ params }: {params: {id: string}}) {
-export default function ProductDetail({ params }: Params) {
-  const productId = parseInt(params.id);
-  const product: Product = productData.find(
-    (value) => value.id === productId
-  ) as Product;
-  const { id, name, description, price, imageUrl, category } = product;
+async function getProductById(id: string): Promise<Product> {
+  const BASE_URL = `https://dummyjson.com/products/${id}`;
+  const res = await fetch(BASE_URL);
+  if (!res.ok) {
+    throw new Error("Network error");
+  }
+  const data = await res.json();
+  const product: Product = data;
   if (!product) {
     return notFound();
   }
+  console.log(product);
+  return product;
+}
+
+// export default function page({ params }: {params: {id: string}}) {
+export default async function ProductDetail({ params }: Params) {
+  const product = await getProductById(params.id);
+
+  const { id, title, description, price, images, category } = product;
   return (
     <>
       <div key={id} className="bg-gray-50 py-12">
@@ -31,10 +39,10 @@ export default function ProductDetail({ params }: Params) {
               <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                 <Image
                   src={
-                    imageUrl ||
+                    images[0] ||
                     "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=600&fit=crop&auto=format"
                   }
-                  alt={name}
+                  alt={title}
                   width={600}
                   height={600}
                   className="object-contain w-full h-full transition-transform duration-300 hover:scale-105"
@@ -50,7 +58,7 @@ export default function ProductDetail({ params }: Params) {
                 </span>
               </div>
 
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{name}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
 
               <div className="flex items-center mb-4">
                 <div className="flex mr-2">
