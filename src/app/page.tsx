@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+// import { User } from "@/types/userType";
 
 export default function Home() {
   const [count, setCount] = useState(0);
+  // const [user, setUser] = useState < User[]> ([]);
   useEffect(() => {
     window.addEventListener("keypress", (e) => {
       if (e.code === "Enter") {

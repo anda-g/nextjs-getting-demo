@@ -4,6 +4,7 @@ import NavBarComponent from "@/components/header/NavBarComponent";
 import { Suspense } from "react";
 import { Open_Sans } from "next/font/google";
 import Loading from "./loading";
+import FooterComponent from "@/components/footer/FooterComponent";
 
 const open_sans = Open_Sans({
   weight: ["400", "700"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={open_sans.className}>
         <NavBarComponent />
         <Suspense fallback={<Loading />}>{children}</Suspense>
+        <FooterComponent />
       </body>
     </html>
   );

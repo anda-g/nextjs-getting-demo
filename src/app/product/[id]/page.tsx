@@ -10,8 +10,7 @@ type Params = {
 };
 
 async function getProductById(id: string): Promise<Product> {
-  const BASE_URL = `https://dummyjson.com/products/${id}`;
-  const res = await fetch(BASE_URL);
+  const res = await fetch(`${process.env.BASE_API_URL}${id}`);
   if (!res.ok) {
     throw new Error("Network error");
   }

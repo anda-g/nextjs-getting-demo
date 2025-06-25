@@ -6,13 +6,13 @@ import React from "react";
 export default function NavBarComponent() {
   const path = usePathname();
   return (
-    <header className="w-full h-16 px-20 flex justify-center items-center border-2 border-gray-200">
+    <header className="w-full fixed z-50 h-16 px-20 flex justify-center items-center border-2 bg-white border-gray-200">
       <nav className="w-full flex items-center justify-between ">
         <Link href={"/"} className="font-bold text-lg">
           Company
         </Link>
 
-        <ul className="flex gap-5">
+        <ul className="flex gap-5 z-50">
           {menuItem.map((menu, index) => (
             <li key={index}>
               <Link

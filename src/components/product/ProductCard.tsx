@@ -14,14 +14,17 @@ export default function ProductCard({ product }: Props) {
       product?.reviews?.length || 0;
 
   return (
-    <div className="rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 p-4 flex flex-col">
-      <div className="relative">
+    <div className="rounded-md bg-white transition-all duration-300 p-4 flex flex-col">
+      <div className="relative hover:bg-gray-200 transition-colors ease-in duration-300 rounded-xl">
         <Image
           width={196}
           height={196}
-          src={product?.images[0]}
+          src={
+            product?.images[0] ||
+            "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=600&fit=crop&auto=format"
+          }
           alt={product?.title}
-          className="rounded-xl w-full object-cover h-48"
+          className="rounded-xl w-full object-contain h-56"
           loading="lazy"
         />
         {product?.discountPercentage > 0 && (
@@ -36,30 +39,37 @@ export default function ProductCard({ product }: Props) {
         )}
       </div>
 
-      <div className="mt-4 flex-grow">
-        <h3 className="text-sm font-semibold text-gray-800">
+      <div className="mt-4 flex flex-col flex-grow gap-1">
+        <h3 className="text-md font-semibold text-gray-800 line-clamp-1">
           {product?.title}
         </h3>
-        <p className="text-xs text-gray-500">
-          {product?.brand} • {product?.category}
-        </p>
-
-        <div className="flex items-center gap-1 mt-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              size={16}
-              className={
-                i < Math.round(averageRating)
-                  ? "text-yellow-400"
-                  : "text-gray-300"
-              }
-            />
-          ))}
-          <span className="text-xs text-gray-500 ml-1">
-            ({product?.reviews?.length})
-          </span>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-gray-500">
+            {product?.brand || "Apple"} • {product?.category}
+          </p>
+          <div className="flex items-center gap-1 mt-1">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                size={14}
+                className={`
+                  ${
+                    i < Math.round(averageRating)
+                      ? "text-yellow-400"
+                      : "text-gray-300"
+                  }
+                `}
+              />
+            ))}
+            <span className="text-xs text-gray-500 ml-1">
+              ({product?.reviews?.length})
+            </span>
+          </div>
         </div>
+      </div>
+
+      <div className="mt-2 text-gray-500 line-clamp-2 text-sm">
+        <p>{product?.description}</p>
       </div>
 
       <div className="mt-4 flex items-center justify-between">
@@ -79,10 +89,10 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         <div className="flex gap-2">
-          <button className="bg-primary text-white p-2 rounded-lg hover:bg-opacity-80">
+          <button className="bg-gray-900 text-white p-2 rounded-md hover:bg-opacity-80">
             <ShoppingCart size={16} />
           </button>
-          <button className="border border-primary text-primary p-2 rounded-lg hover:bg-primary hover:text-white">
+          <button className="transition-colors duration-300 ease-in-out border hover:border-gray-900 text-gray-900 p-2 rounded-md hover:bg-gray-900 hover:text-white">
             <Eye size={16} />
           </button>
         </div>
