@@ -39,7 +39,7 @@ export default function ProductPage() {
     } else {
       param.delete("search");
     }
-    router.push(`/product?${param.toString().toLowerCase()}`);
+    router.push(`/product?${param.toString()}`);
   };
 
   useEffect(() => {
