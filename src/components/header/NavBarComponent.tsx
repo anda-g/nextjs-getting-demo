@@ -9,7 +9,7 @@ export default function NavBarComponent() {
     <header className="w-full fixed z-50 h-16 px-20 flex justify-center items-center border-2 bg-white border-gray-200">
       <nav className="w-full flex items-center justify-between ">
         <Link href={"/"} className="font-bold text-lg">
-          Company
+          Kuika
         </Link>
 
         <ul className="flex gap-5 z-50">

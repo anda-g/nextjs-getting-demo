@@ -14,7 +14,7 @@ export default function ProductCard({ product }: Props) {
       product?.reviews?.length || 0;
 
   return (
-    <div className="rounded-md bg-white transition-all duration-300 p-4 flex flex-col">
+    <div className="rounded-md bg-white transition-all duration-300 p-4 flex flex-col border-1 border-gray-200">
       <div className="relative hover:bg-gray-200 transition-colors ease-in duration-300 rounded-xl">
         <Image
           width={196}
@@ -28,7 +28,7 @@ export default function ProductCard({ product }: Props) {
           loading="lazy"
         />
         {product?.discountPercentage > 0 && (
-          <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+          <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">
             {product?.discountPercentage.toFixed(0)}% OFF
           </div>
         )}

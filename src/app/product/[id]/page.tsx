@@ -1,36 +1,33 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { Product } from "@/types/productType";
-import { notFound } from "next/navigation";
+import useSWR from "swr";
+import { fetcher } from "@/services/fetcher";
+import Loading from "@/app/loading";
+import { useParams } from "next/navigation";
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
-async function getProductById(id: string): Promise<Product> {
-  const res = await fetch(`${process.env.BASE_API_URL}${id}`);
-  if (!res.ok) {
-    throw new Error("Network error");
-  }
-  const data = await res.json();
-  const product: Product = data;
-  if (!product) {
-    return notFound();
-  }
-  console.log(product);
-  return product;
-}
+// type Params = {
+//   params: {
+//     id: string;
+//   };
+// };
 
 // export default function page({ params }: {params: {id: string}}) {
-export default async function ProductDetail({ params }: Params) {
-  const product = await getProductById(params.id);
+export default function ProductDetail() {
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_BASE_API_URL}${id}`,
+    fetcher
+  );
+  if (isLoading && !data) return <Loading />;
+  if (error) return <div>Error</div>;
+  const product: Product = data;
 
-  const { id, title, description, price, images, category } = product;
+  const { title, description, price, images, category } = product;
   return (
     <>
-      <div key={id} className="bg-gray-50 py-12">
+      <div className="bg-gray-50 py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-8 bg-white rounded-xl shadow-lg overflow-hidden">
             {/* Product Image Section */}
