@@ -15,6 +15,22 @@ const open_sans = Open_Sans({
 export const metadata: Metadata = {
   title: "Kuika",
   description: "E-Commerce website provide more than a million of products",
+  openGraph: {
+    title: "Kuika",
+    description: "E-Commerce website provide more than a million of products",
+    url: "https://kuika.vercel.app",
+    siteName: "Kuika",
+    images: [
+      {
+        url: "https://kuika.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Kuika E-Commerce",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

@@ -5,7 +5,7 @@ export default async function About() {
   return (
     <>
       <main className="flex flex-col pt-16">
-        <div className="bg-blue-50 w-full h-64 px-20 flex items-center">
+        <div className="bg-blue-50 w-full h-64 px-5 md:px-20 flex items-center">
           <div className="flex flex-col">
             <h1 className="font-bold text-3xl">About us</h1>
             <ol className="flex items-center whitespace-nowrap">

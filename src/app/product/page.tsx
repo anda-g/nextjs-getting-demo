@@ -83,7 +83,7 @@ export default function ProductPage() {
   return (
     <>
       <main className="flex flex-col pt-16">
-        <div className="bg-blue-50 w-full h-64 px-20 flex items-center">
+        <div className="bg-blue-50 w-full h-64 px-5 md:px-20 flex items-center">
           <div className="flex flex-col">
             <h1 className="font-bold text-3xl">ALL Product</h1>
             <ol className="flex items-center whitespace-nowrap">
@@ -118,7 +118,7 @@ export default function ProductPage() {
             </ol>
           </div>
         </div>
-        <div className="flex items-center justify-between py-5 px-20">
+        <div className="flex items-center justify-between gap-4 py-5 px-5 md:px-20">
           <div className="relative">
             <button
               onClick={() => setOpen(!open)}
@@ -187,9 +187,9 @@ export default function ProductPage() {
                 placeholder="Search..."
                 value={query}
                 onChange={handleSearchChange}
-                className="py-2.5 sm:py-3 px-4 ps-11 block w-full border-2 border-blue-200 rounded-s-lg sm:text-sm active:z-10 focus:outline-blue-500 "
+                className="py-2.5 px-4 ps-11 block w-full border-2 border-blue-200 rounded-s-lg rounded-e-lg md:rounded-e-none text-sm active:z-10 focus:outline-blue-500 "
               />
-              <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
+              <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
                 <svg
                   className="shrink-0 size-4 text-blue-400 dark:text-neutral-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -208,14 +208,14 @@ export default function ProductPage() {
               </div>
               <button
                 type="submit"
-                className="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                className="py-3 px-4 hidden md:inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 Search
               </button>
             </form>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4 px-20 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-5 md:px-20 w-full">
           {filterProduct.length === 0 ? (
             <ProductNotFound />
           ) : (

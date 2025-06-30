@@ -7,16 +7,17 @@ import { motion } from "motion/react";
 export default function NavBarComponent() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
   const path = usePathname();
   return (
     <>
-      <header className="w-full fixed z-50 h-16 px-20 flex justify-center items-center border-2 bg-white border-gray-200">
+      <header className="w-full fixed z-50 h-16 px-5 md:px-20 flex justify-center items-center border-b-2 bg-white border-gray-200">
         <nav className="w-full flex items-center justify-between ">
           <Link href={"/"} className="font-bold text-lg">
             Kuika
           </Link>
 
-          <ul className="flex gap-5 z-50">
+          <ul className="md:flex gap-5 z-50 hidden">
             {menuItem.map((menu, index) => (
               <li key={index}>
                 <Link
@@ -31,7 +32,7 @@ export default function NavBarComponent() {
             ))}
           </ul>
 
-          <ul className="flex gap-3 items-center justify-center">
+          <ul className="md:flex hidden gap-3 items-center justify-center">
             <li
               onClick={() => setLoginOpen(!loginOpen)}
               className="text-sm cursor-pointer"
@@ -48,8 +49,71 @@ export default function NavBarComponent() {
               </button>
             </li>
           </ul>
+
+          <button onClick={() => setNavOpen(!navOpen)} className="md:hidden">
+            <svg
+              className="w-6 h-6 text-black"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
         </nav>
       </header>
+      {navOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="flex flex-col fixed top-16 left-0 px-5 w-full h-fit pb-5 rounded-b-md bg-white z-10"
+        >
+          <ul className="flex flex-col ">
+            {menuItem.map((menu, index) => (
+              <li key={index} className="py-2">
+                <Link
+                  onClick={() => setNavOpen(false)}
+                  className={`text-sm ${
+                    path === menu.path ? "text-blue-600" : ""
+                  }`}
+                  href={menu.path}
+                >
+                  {menu.item}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="flex flex-col justify-center">
+            <li
+              onClick={() => {
+                setNavOpen(false);
+                setLoginOpen(!loginOpen);
+              }}
+              className="text-sm cursor-pointer py-2"
+            >
+              Log in
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setNavOpen(false);
+                  setSignUpOpen(!signUpOpen);
+                }}
+                className="rounded-md py-1.5 px-3 mt-2 text-white bg-black text-sm cursor-pointer"
+              >
+                Sign up
+              </button>
+            </li>
+          </ul>
+        </motion.div>
+      )}
       {loginOpen && (
         <div
           id="authentication-modal"
