@@ -28,7 +28,7 @@ export default function FooterComponent() {
               <rect x="14" y="11" width="7" height="12"></rect>
             </svg>
             <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-              Company
+              Kuika
             </span>
           </Link>
           <div className="mt-6 lg:max-w-sm">

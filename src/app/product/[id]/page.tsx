@@ -15,7 +15,8 @@ import { useParams } from "next/navigation";
 
 // export default function page({ params }: {params: {id: string}}) {
 export default function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
+  // Define the data type for use params
+  const { id } = useParams<{ id: string }>(); // useParams return object
   const { data, isLoading, error } = useSWR(
     `${process.env.NEXT_PUBLIC_BASE_API_URL}${id}`,
     fetcher

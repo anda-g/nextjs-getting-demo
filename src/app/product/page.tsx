@@ -10,6 +10,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ProductNotFound from "@/components/not-found/ProductNotFound";
 
 export default function ProductPage() {
+  const [category, setCategory] = useState<Dropdown>();
+  const [open, setOpen] = useState(false);
   const [filterProduct, setFilterProduct] = useState<Product[]>([]);
   const searchParam = useSearchParams();
   const [query, setQuery] = useState("");
@@ -33,6 +35,7 @@ export default function ProductPage() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
+    setCategory(CategoriesMenu[0]);
     const param = new URLSearchParams();
     if (value.trim()) {
       param.set("search", value);
@@ -57,6 +60,18 @@ export default function ProductPage() {
       );
     }
   }, [data, searchParam]);
+
+  useEffect(() => {
+    if (!data) return;
+    if (category?.value === "all-products" || !category) {
+      setFilterProduct(data.products);
+    } else {
+      setFilterProduct(
+        data.products.filter((p: Product) => p.category === category.value)
+      );
+    }
+  }, [data, category]);
+
   if (isLoading && !data) return <Loading />;
   if (error) return <div>Error</div>;
 
@@ -99,7 +114,58 @@ export default function ProductPage() {
           </div>
         </div>
         <div className="flex items-center justify-between py-5 px-20">
-          <div></div>
+          <div className="relative">
+            <button
+              onClick={() => setOpen(!open)}
+              id="dropdownDefaultButton"
+              data-dropdown-toggle="dropdown"
+              className="text-gray-800 border-1 border-gray-200  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              type="button"
+            >
+              {category?.label || "All Products"}{" "}
+              <svg
+                className="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+
+            <div
+              id="dropdown"
+              className={`absolute top-15 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 ${
+                open ? "block" : "hidden"
+              }`}
+            >
+              <ul
+                className="py-2 h-80 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDefaultButton"
+              >
+                {CategoriesMenu.map((c, index) => (
+                  <li
+                    onClick={() => {
+                      setCategory(c);
+                      setOpen(false);
+                    }}
+                    key={index}
+                  >
+                    <span className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      {c.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <div>
             <label
               htmlFor="hs-trailing-button-add-on-with-icon-and-button"
@@ -159,3 +225,39 @@ export default function ProductPage() {
     </>
   );
 }
+
+type Dropdown = {
+  value: string;
+  label: string;
+};
+
+const CategoriesMenu: Dropdown[] = [
+  "all-products",
+  "beauty",
+  "fragrances",
+  "furniture",
+  "groceries",
+  "home-decoration",
+  "kitchen-accessories",
+  "laptops",
+  "mens-shirts",
+  "mens-shoes",
+  "mens-watches",
+  "mobile-accessories",
+  "motorcycle",
+  "skin-care",
+  "smartphones",
+  "sports-accessories",
+  "sunglasses",
+  "tablets",
+  "tops",
+  "vehicle",
+  "womens-bags",
+  "womens-dresses",
+  "womens-jewellery",
+  "womens-shoes",
+  "womens-watches",
+].map((item) => ({
+  value: item,
+  label: item.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+}));
