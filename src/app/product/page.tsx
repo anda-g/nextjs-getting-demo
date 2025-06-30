@@ -73,7 +73,12 @@ export default function ProductPage() {
   }, [data, category]);
 
   if (isLoading && !data) return <Loading />;
-  if (error) return <div>Error</div>;
+  if (error)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        Error: {error}
+      </div>
+    );
 
   return (
     <>

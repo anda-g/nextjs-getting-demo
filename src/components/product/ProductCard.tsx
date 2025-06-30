@@ -3,6 +3,7 @@ import React from "react";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import { Product } from "@/types/productType";
 import Image from "next/image";
+import { motion } from "motion/react";
 
 type Props = {
   product: Product;
@@ -14,7 +15,11 @@ export default function ProductCard({ product }: Props) {
       product?.reviews?.length || 0;
 
   return (
-    <div className="rounded-md bg-white transition-all duration-300 p-4 flex flex-col border-1 border-gray-200">
+    <motion.div
+      initial={{ y: 10, opacity: 0.5 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="rounded-md bg-white p-4 flex flex-col border-1 border-gray-200"
+    >
       <div className="relative hover:bg-gray-200 transition-colors ease-in duration-300 rounded-xl">
         <Image
           width={196}
@@ -97,6 +102,6 @@ export default function ProductCard({ product }: Props) {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
