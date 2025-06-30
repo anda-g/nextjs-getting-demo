@@ -215,13 +215,13 @@ export default function ProductPage() {
             </form>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-5 md:px-20 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-5 md:px-20 w-full">
           {filterProduct.length === 0 ? (
             <ProductNotFound />
           ) : (
-            filterProduct.map((product) => (
+            filterProduct.map((product, index) => (
               <Link key={product.id} href={`/product/${product.id}`}>
-                <ProductCard product={product} />
+                <ProductCard index={index} product={product} />
               </Link>
             ))
           )}

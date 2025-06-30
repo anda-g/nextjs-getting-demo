@@ -6,18 +6,21 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 type Props = {
+  index?: number;
   product: Product;
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ index = 0, product }: Props) {
   const averageRating =
     product?.reviews?.reduce((acc, r) => acc + r?.rating, 0) /
       product?.reviews?.length || 0;
 
   return (
     <motion.div
-      initial={{ y: 10, opacity: 0.5 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: 10, opacity: 0.8 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{ delay: (index % 4) * 0.1 }}
       className="rounded-md bg-white p-4 flex flex-col border-1 border-gray-200"
     >
       <div className="relative hover:bg-gray-200 transition-colors ease-in duration-300 rounded-xl">
