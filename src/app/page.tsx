@@ -1,5 +1,7 @@
 "use client";
+import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 // import { User } from "@/types/userType";
 
 export default function Home() {
@@ -16,7 +18,9 @@ export default function Home() {
   return (
     <>
       <div className="h-screen w-full flex flex-col items-center justify-center gap-3">
-        <h1 className="text-3xl">{count}</h1>
+        <AnimatePresence>
+          <motion.h1 className="text-3xl">{count}</motion.h1>
+        </AnimatePresence>
         <button
           onClick={() => {
             let x = count;
