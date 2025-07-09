@@ -16,11 +16,11 @@ export default function Home() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    duration: 1.5,
-                    delay: index * 0.2,
+                    duration: 1,
+                    delay: index * 0.1,
                     ease: "easeInOut",
                   }}
-                  viewport={{ once: false, amount: 0.1 }}
+                  viewport={{ once: false, amount: 0.01 }}
                   className="inline-block text-indigo-600"
                 >
                   {letter}
