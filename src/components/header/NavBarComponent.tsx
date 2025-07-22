@@ -57,7 +57,7 @@ export default function NavBarComponent() {
           </ul>
           <div className="flex gap-4 items-center">
             <Link
-              href="/product/cart"
+              href="/cart"
               className="relative flex items-center justify-center p-2"
             >
               <ShoppingCartIcon strokeWidth={1.5} size={20} />

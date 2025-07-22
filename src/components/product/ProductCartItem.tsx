@@ -25,7 +25,7 @@ export default function ProductCartItem(cart: CartItem) {
     dispatch(removeFromCart({ id: cart.id }));
   };
   return (
-    <div className="flex items-start justify-between w-full px-4">
+    <div className="flex items-start justify-between w-full">
       {/* Image */}
 
       <div className="flex items-start gap-5 justify-start">

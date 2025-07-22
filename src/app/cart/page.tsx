@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import ProductCartItem from "@/components/product/ProductCartItem";
 import { useAppSelector } from "@/lib/hooks";
 import React from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function CartPage() {
   const { items } = useAppSelector((state) => state.cart);
@@ -22,7 +24,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className=" pt-24 px-5 md:px-20 h-screen">
+    <main className=" pt-24 px-5 md:px-20 min-h-screen h-fit">
       <div className="flex flex-col mb-4">
         <h1 className="text-3xl font-bold">Your cart</h1>
         <p className="text-gray-600">{itemCount} Products in your cart</p>
@@ -32,32 +34,43 @@ export default function CartPage() {
         <div className="md:col-span-3 flex flex-col gap-4">
           <div className="w-full rounded-md border-2 border-gray-200">
             <div className="py-4 flex flex-col gap-4">
-              {(items || []).map((item) => (
-                <ProductCartItem key={item.id} {...item} />
+              {(items || []).map((item, index) => (
+                <div className="flex flex-col gap-4 px-4" key={index}>
+                  <ProductCartItem {...item} />
+                  {index !== items.length - 1 ? <Separator /> : ""}
+                </div>
               ))}
             </div>
           </div>
         </div>
-        <div className="rounded-md border-2 border-gray-200 h-fit p-5">
-          <div className="flex flex-col">
-            <h1 className="text-lg font-bold">Order summary</h1>
-            <p className="text-gray-600">{itemCount} Products in your cart</p>
-            <div className="flex justify-between ">
+        <Card className="w-full max-w-md rounded-md border-2 border-gray-200 h-fit">
+          <CardHeader>
+            <h1 className="text-xl font-bold">Order Summary</h1>
+            <p className="text-sm text-muted-foreground">
+              Review your items and check delivery details before proceeding to
+              checkout.
+            </p>
+          </CardHeader>
+
+          <CardContent className="space-y-3">
+            <div className="flex justify-between text-sm">
               <span>Subtotal ({itemCount} items)</span>
               <span>${total.toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Shipping</span>
               <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Tax</span>
               <span>${tax.toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between font-bold text-lg">
+            <Separator />
+
+            <div className="flex justify-between text-base font-semibold">
               <span>Total</span>
               <span>${finalTotal.toFixed(2)}</span>
             </div>
@@ -72,13 +85,13 @@ export default function CartPage() {
               Proceed to Checkout
             </Button>
 
-            <div className="text-xs text-muted-foreground space-y-1">
+            <div className="pt-4 text-xs text-muted-foreground space-y-1">
               <p>✓ Secure checkout</p>
               <p>✓ 30-day return policy</p>
               <p>✓ Customer support</p>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
