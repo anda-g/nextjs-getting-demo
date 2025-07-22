@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/card";
 
 // file validation constants
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
+const MAX_FILE_SIZE = 0.5 * 1024 * 1024; // 1MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const passwordRegex: RegExp =
@@ -57,7 +57,7 @@ const formSchema = z.object({
   file: z
     .any()
     .refine((file) => file instanceof File, "File is required")
-    .refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 2MB")
+    .refine((file) => file?.size >= MAX_FILE_SIZE, "Max file size is 2MB")
     .refine(
       (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
       "Only .jpeg .jpg, .png, .pdf files are allowed"

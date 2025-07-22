@@ -1,22 +1,26 @@
 "use client";
 import Loading from "@/app/loading";
-import { fetcher } from "@/services/fetcher";
+import { useGetProductByIdQuery } from "@/lib/api/productApi";
+// import { fetcher } from "@/services/fetcher";
+// import useSWR from "swr";
 import { Product } from "@/types/productType";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import useSWR from "swr";
 
 // export default function page({ params }: {params: {id: string}}) {
 export default function ProductDetail() {
-  // Define the data type for use params
+  // === RTK QUERY ===
   const { id } = useParams<{ id: string }>(); // useParams return object
-  const { data, isLoading, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_BASE_API_URL}${id}`,
-    fetcher
-  );
+  const { data, isLoading, error } = useGetProductByIdQuery(id);
+  // Define the data type for use params
+  // const { data, isLoading, error } = useSWR(
+  //   `${process.env.NEXT_PUBLIC_BASE_API_URL}${id}`,
+  //   fetcher
+  // );
   if (isLoading && !data) return <Loading />;
   if (error) return <div>Error</div>;
-  const product: Product = data;
+
+  const product: Product = data as Product;
 
   const { title, description, price, images, category } = product;
   return (

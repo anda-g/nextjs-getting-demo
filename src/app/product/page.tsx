@@ -3,11 +3,12 @@ import ProductCard from "@/components/product/ProductCard";
 import { Product } from "@/types/productType";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
+// import useSWR from "swr";
+// import { fetcher } from "@/services/fetcher";
 import Loading from "../loading";
-import { fetcher } from "@/services/fetcher";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductNotFound from "@/components/not-found/ProductNotFound";
+import { useGetProductsQuery } from "@/lib/api/productApi";
 
 export default function ProductPage() {
   const [category, setCategory] = useState<Dropdown>();
@@ -16,10 +17,13 @@ export default function ProductPage() {
   const searchParam = useSearchParams();
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const { data, isLoading, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_BASE_API_URL}?limit=100`,
-    fetcher
-  );
+  // const { data, isLoading, error } = useSWR(
+  //   `${process.env.NEXT_PUBLIC_BASE_API_URL}?limit=100`,
+  //   fetcher
+  // );
+
+  const { data, isLoading, error } = useGetProductsQuery();
+  console.log(data);
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +80,7 @@ export default function ProductPage() {
   if (error)
     return (
       <div className="h-screen flex justify-center items-center">
-        Error: {error}
+        Error: Error while fetching products
       </div>
     );
 
@@ -220,9 +224,7 @@ export default function ProductPage() {
             <ProductNotFound />
           ) : (
             filterProduct.map((product, index) => (
-              <Link key={product.id} href={`/product/${product.id}`}>
-                <ProductCard index={index} product={product} />
-              </Link>
+              <ProductCard key={product.id} index={index} product={product} />
             ))
           )}
         </div>

@@ -5,6 +5,8 @@ import { Open_Sans } from "next/font/google";
 import Loading from "./loading";
 import NavBarWrapper from "@/components/header/NavBarWrapper";
 import FooterWrapper from "@/components/footer/FooterWrapper";
+import StoreProvider from "@/lib/Provider";
+import { Toaster } from "sonner";
 
 const open_sans = Open_Sans({
   weight: ["400", "700"],
@@ -89,9 +91,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={open_sans.className}>
-        <NavBarWrapper />
-        <Suspense fallback={<Loading />}>{children}</Suspense>
-        <FooterWrapper />
+        <StoreProvider>
+          <NavBarWrapper />
+          <Suspense fallback={<Loading />}>
+            {children}
+            <Toaster position="top-center" richColors />
+          </Suspense>
+          <FooterWrapper />
+        </StoreProvider>
       </body>
     </html>
   );

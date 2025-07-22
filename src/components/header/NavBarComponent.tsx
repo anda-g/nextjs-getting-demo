@@ -3,11 +3,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { AnimatePresence, motion, useScroll } from "motion/react";
-
+import { ShoppingCartIcon } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { useAppSelector } from "@/lib/hooks";
 export default function NavBarComponent() {
   const { scrollYProgress } = useScroll();
   const [navOpen, setNavOpen] = useState(false);
   const path = usePathname();
+  const { itemCount } = useAppSelector((state) => state.cart);
   return (
     <>
       {/* ====== TRIGGER SCROLL ===== */}
@@ -38,7 +41,7 @@ export default function NavBarComponent() {
             ))}
           </ul>
           {/* ====== LOGIN & SIGNUP DESKTOP ====== */}
-          <ul className="md:flex hidden gap-3 items-center justify-center">
+          <ul className=" hidden gap-3 items-center justify-center">
             <Link href={"/login"} className="text-sm cursor-pointer">
               Log in
             </Link>
@@ -52,28 +55,43 @@ export default function NavBarComponent() {
               </Link>
             </li>
           </ul>
-
-          {/* ====== HAMBURGER MENU BUTTON ====== */}
-          <button onClick={() => setNavOpen(!navOpen)} className="md:hidden">
-            <svg
-              className="w-6 h-6 text-black"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
+          <div className="flex gap-4 items-center">
+            <Link
+              href="/product/cart"
+              className="relative flex items-center justify-center p-2"
             >
-              <motion.path
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                exit={{ pathLength: 0 }}
-                transition={{ duration: 0.3 }}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          </button>
+              <ShoppingCartIcon strokeWidth={1.5} size={20} />
+              {itemCount > 0 && (
+                <Badge
+                  variant={"destructive"}
+                  className="absolute -right-0 -top-0 h-4 min-w-4 flex items-center justify-center px-1"
+                >
+                  {itemCount}
+                </Badge>
+              )}
+            </Link>
+            {/* ====== HAMBURGER MENU BUTTON ====== */}
+            <button onClick={() => setNavOpen(!navOpen)} className="md:hidden">
+              <svg
+                className="w-6 h-6 text-black"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <motion.path
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  exit={{ pathLength: 0 }}
+                  transition={{ duration: 0.3 }}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              </svg>
+            </button>
+          </div>
         </nav>
       </header>
       {/* ====== MOBILE MENU ====== */}

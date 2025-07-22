@@ -11,6 +11,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const data = (await fetch(
     `${process.env.NEXT_PUBLIC_BASE_API_URL}${id}`
   ).then((res) => res.json())) as Product;
+
   if (!data) {
     return {};
   }

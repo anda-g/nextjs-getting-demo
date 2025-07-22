@@ -4,6 +4,10 @@ import { Star, ShoppingCart, Eye } from "lucide-react";
 import { Product } from "@/types/productType";
 import Image from "next/image";
 import { motion } from "motion/react";
+import Link from "next/link";
+import { useAppDispatch } from "@/lib/hooks";
+import { addToCart } from "@/lib/features/cartSlice";
+import { toast } from "sonner";
 
 type Props = {
   index?: number;
@@ -14,6 +18,16 @@ export default function ProductCard({ index = 0, product }: Props) {
   const averageRating =
     product?.reviews?.reduce((acc, r) => acc + r?.rating, 0) /
       product?.reviews?.length || 0;
+
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    dispatch(addToCart(product));
+    toast.success("Product has been added to cart!", {
+      description: new Date().toLocaleString(),
+    });
+  };
 
   return (
     <motion.div
@@ -97,12 +111,18 @@ export default function ProductCard({ index = 0, product }: Props) {
         </div>
 
         <div className="flex gap-2">
-          <button className="bg-gray-900 text-white p-2 rounded-md hover:bg-opacity-80">
+          <button
+            onClick={handleAddToCart}
+            className="bg-gray-900 text-white p-2 rounded-md hover:bg-opacity-80"
+          >
             <ShoppingCart size={16} />
           </button>
-          <button className="transition-colors duration-300 ease-in-out border hover:border-gray-900 text-gray-900 p-2 rounded-md hover:bg-gray-900 hover:text-white">
+          <Link
+            href={`/product/${product?.id}`}
+            className="transition-colors duration-300 ease-in-out border hover:border-gray-900 text-gray-900 p-2 rounded-md hover:bg-gray-900 hover:text-white"
+          >
             <Eye size={16} />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>
