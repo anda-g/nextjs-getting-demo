@@ -74,6 +74,7 @@ import { ArrowUpDown } from "lucide-react";
 import DataTableComponent from "@/components/data-table/DataTableComponent";
 import { useState } from "react";
 import ProductDetailsModal from "@/components/product/ProductDetailsModal";
+import CreateProduct from "@/components/dashboard/create-product/CreateProduct";
 
 export default function DataTableClient() {
   const { data, isLoading } = useSWR<{ products: Product[] }>(
@@ -212,6 +213,9 @@ export default function DataTableClient() {
 
   return (
     <>
+      <div className="grid grid-cols-5 h-30 gap-5">
+        <CreateProduct />
+      </div>
       <DataTableComponent columns={columns} data={data?.products} />
       {isOpen && (
         <ProductDetailsModal
