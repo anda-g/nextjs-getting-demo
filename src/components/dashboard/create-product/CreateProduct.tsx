@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAddProductMutation } from "@/lib/api/platziApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import React, { useState } from "react";
@@ -39,7 +40,7 @@ const schema = z.object({
     .string()
     .min(10, "Description must be at least 10 character length!"),
   categoryId: z.string(),
-  images: z.array(z.file()),
+  images: z.array(z.string()),
 });
 
 export default function CreateProduct() {
@@ -51,12 +52,21 @@ export default function CreateProduct() {
       price: 0,
       description: "",
       categoryId: "",
-      images: [],
+      images: [
+        "https://www.monde-selection.com/wp-content/uploads/2024/05/1042983-768x768.png",
+      ],
     },
   });
 
-  const onSubmit = (values: z.infer<typeof schema>) => {
-    console.log(values);
+  const [addProduct] = useAddProductMutation();
+
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    try {
+      const result = await addProduct({ ...values }).unwrap();
+      console.log("Created product:", result);
+    } catch (err) {
+      console.error("Failed to create product:", err);
+    }
   };
   return (
     <div className="w-full rounded-md border-2 border-gray-200 flex justify-center items-center">

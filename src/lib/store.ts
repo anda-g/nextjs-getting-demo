@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { productApi } from "./api/productApi";
 import cartReducer from "./features/cartSlice";
+import { platziApi } from "./api/platziApi";
 
 const persistConfig = {
   key: "root",
@@ -13,6 +14,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   cart: cartReducer,
   [productApi.reducerPath]: productApi.reducer,
+  [platziApi.reducerPath]: platziApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -21,9 +23,9 @@ export const makeStore = () => {
   const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleWare) =>
-      getDefaultMiddleWare({ serializableCheck: false }).concat(
-        productApi.middleware
-      ),
+      getDefaultMiddleWare({ serializableCheck: false })
+        .concat(productApi.middleware)
+        .concat(platziApi.middleware),
   });
 
   const persistor = persistStore(store);
