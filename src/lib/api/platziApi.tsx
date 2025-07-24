@@ -20,6 +20,16 @@ type ProductResponseType = {
   };
 };
 
+type CategoryResponse = {
+  id: string;
+  name: string;
+};
+
+type FileResponse = {
+  originalname: string;
+  filename: string;
+  location: string;
+};
 export const platziApi = createApi({
   reducerPath: "platziApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://api.escuelajs.co/api/v1/" }),
@@ -33,7 +43,27 @@ export const platziApi = createApi({
       }),
       invalidatesTags: ["Platzi"],
     }),
+    addFile: builder.mutation<FileResponse, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("file", file); // must match API
+
+        return {
+          url: "files/upload",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
+    getCategory: builder.query<CategoryResponse[], void>({
+      query: () => "categories",
+      providesTags: ["Platzi"],
+    }),
   }),
 });
 
-export const { useAddProductMutation } = platziApi;
+export const {
+  useAddProductMutation,
+  useAddFileMutation,
+  useGetCategoryQuery,
+} = platziApi;

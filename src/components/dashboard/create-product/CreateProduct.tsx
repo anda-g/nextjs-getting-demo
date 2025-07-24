@@ -26,21 +26,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useAddProductMutation } from "@/lib/api/platziApi";
+import {
+  useAddFileMutation,
+  useAddProductMutation,
+  useGetCategoryQuery,
+} from "@/lib/api/platziApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
+import Image from "next/image";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 character length!"),
-  price: z.number("Invalid number").gt(0, "Price must be at least 1$."),
+  price: z.float32("Invalid number").gt(0, "Price must be at least 1$."),
   description: z
     .string()
     .min(10, "Description must be at least 10 character length!"),
   categoryId: z.string(),
-  images: z.array(z.string()),
+  images: z.array(z.file()),
 });
 
 export default function CreateProduct() {
@@ -52,25 +57,58 @@ export default function CreateProduct() {
       price: 0,
       description: "",
       categoryId: "",
-      images: [
-        "https://www.monde-selection.com/wp-content/uploads/2024/05/1042983-768x768.png",
-      ],
+      images: [],
     },
   });
 
   const [addProduct] = useAddProductMutation();
+  const [addFile] = useAddFileMutation();
+
+  type CreateProductType = {
+    title: string;
+    price: number;
+    categoryId: string;
+    description: string;
+    images: string[];
+  };
+
+  const handleUpload = async (files: File[], images: string[]) => {
+    for (const file of files) {
+      const result = await addFile(file).unwrap();
+      console.log("File uploaded: ", result);
+      images.push(result.location);
+    }
+  };
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
+    const productCreate: CreateProductType = {
+      title: values.title,
+      price: values.price,
+      categoryId: values.categoryId,
+      description: values.description,
+      images: [],
+    };
+
     try {
-      const result = await addProduct({ ...values }).unwrap();
+      await handleUpload(values.images, productCreate.images);
+      const result = await addProduct({ ...productCreate }).unwrap();
       console.log("Created product:", result);
     } catch (err) {
       console.error("Failed to create product:", err);
     }
   };
+  const [previews, setPreviews] = useState<string[]>([]);
+
+  const { data } = useGetCategoryQuery();
   return (
     <div className="w-full rounded-md border-2 border-gray-200 flex justify-center items-center">
-      <Button onClick={() => setIsOpen(!isOpen)} variant={"outline"}>
+      <Button
+        onClick={() => {
+          setIsOpen(!isOpen);
+          setPreviews([]);
+        }}
+        variant={"outline"}
+      >
         <Plus />
       </Button>
       {isOpen && (
@@ -143,19 +181,17 @@ export default function CreateProduct() {
                           <FormControl>
                             <Select
                               onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              value={field.value}
                             >
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Category" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="34">Clothes</SelectItem>
-                                <SelectItem value="35">Electronics</SelectItem>
-                                <SelectItem value="36">Furniture</SelectItem>
-                                <SelectItem value="37">Shoes</SelectItem>
-                                <SelectItem value="38">
-                                  Miscellaneous
-                                </SelectItem>
+                                {data?.map((d) => (
+                                  <SelectItem key={d.id} value={d.id}>
+                                    {d.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -180,8 +216,47 @@ export default function CreateProduct() {
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Images</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="file"
+                              multiple
+                              onChange={(e) => {
+                                const files = Array.from(e.target.files ?? []);
+                                field.onChange(files);
+
+                                const filePreviews = files.map((file) =>
+                                  URL.createObjectURL(file)
+                                );
+                                setPreviews(filePreviews);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </form>
                 </Form>
+                {previews.length > 0 && (
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {previews.map((src, idx) => (
+                      <Image
+                        width={100}
+                        height={100}
+                        key={idx}
+                        src={src}
+                        alt={`Preview ${idx + 1}`}
+                        className="w-24 h-24 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                )}
               </CardContent>
               <CardFooter>
                 <Button className="w-full" form="create-product" type="submit">
