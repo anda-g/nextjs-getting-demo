@@ -7,6 +7,8 @@ import NavBarWrapper from "@/components/header/NavBarWrapper";
 import FooterWrapper from "@/components/footer/FooterWrapper";
 import StoreProvider from "@/lib/Provider";
 import { Toaster } from "sonner";
+import Script from "next/script";
+import { Analytics } from "./analytics";
 
 const open_sans = Open_Sans({
   weight: ["400", "700"],
@@ -90,10 +92,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics Script */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+ `}
+        </Script>
+      </head>
       <body className={open_sans.className}>
         <StoreProvider>
           <NavBarWrapper />
           <Suspense fallback={<Loading />}>
+            <Analytics />
             {children}
             <Toaster position="top-center" richColors />
           </Suspense>
