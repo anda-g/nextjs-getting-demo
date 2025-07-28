@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useAppDispatch } from "@/lib/hooks";
 import { addToCart } from "@/lib/features/cartSlice";
 import { toast } from "sonner";
+import { trackAddToCart } from "@/lib/gtag";
 
 type Props = {
   index?: number;
@@ -24,6 +25,7 @@ export default function ProductCard({ index = 0, product }: Props) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(addToCart(product));
+    trackAddToCart(product.title, product.price);
     toast.success("Product has been added to cart!", {
       description: new Date().toLocaleString(),
     });

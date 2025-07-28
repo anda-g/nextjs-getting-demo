@@ -33,16 +33,6 @@ export const event = ({
   });
 };
 
-// Add just a few useful e-commerce events
-export const trackPurchase = (orderId: string, value: number) => {
-  if (!GA_TRACKING_ID) return;
-  window.gtag("event", "purchase", {
-    transaction_id: orderId,
-    value: value,
-    currency: "USD",
-  });
-};
-
 export const trackAddToCart = (itemName: string, value: number) => {
   if (!GA_TRACKING_ID) return;
   window.gtag("event", "add_to_cart", {
